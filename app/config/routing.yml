@@ -1,3 +1,14 @@
-app:
-    resource: "@AppBundle/Controller/"
+laetificat_frontend:
+    resource: "@LaetificatFrontendBundle/Controller/"
     type:     annotation
+    prefix:   /
+
+laetificat_common:
+    resource: "@LaetificatCommonBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+laetificat_admin:
+    resource: "@LaetificatAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /

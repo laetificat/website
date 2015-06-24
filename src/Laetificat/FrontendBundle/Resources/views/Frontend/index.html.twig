@@ -1,0 +1,16 @@
+{% extends 'LaetificatFrontendBundle:Frontend:base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    {% stylesheets filter='cssrewrite' '@LaetificatFrontendBundle/Resources/public/css/*' %}
+        <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+{{ include('LaetificatFrontendBundle:Frontend:menu.html.twig') }}
+{{ include('LaetificatFrontendBundle:Frontend:slider.html.twig') }}
+{{ include('LaetificatFrontendBundle:Frontend:content.html.twig') }}
+{{ include('LaetificatFrontendBundle:Frontend:footer.html.twig') }}
+{% endblock %}

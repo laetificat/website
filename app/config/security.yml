@@ -1,7 +1,13 @@
 security:
+    encoders:
+        Laetificat\CommonBundle\Entity\User:
+            algorithm: bcrypt
+
     providers:
-        in_memory:
-            memory: ~
+        laetificat_database:
+            entity:
+                class: LaetificatCommonBundle:User
+                property: username
 
     firewalls:
         dev:
@@ -9,4 +15,6 @@ security:
             security: false
 
         default:
-            anonymous: ~
+            pattern: ^/admin
+            http_basic: ~
+            provider: laetificat_database
