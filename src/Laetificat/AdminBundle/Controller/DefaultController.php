@@ -3,6 +3,7 @@
 namespace Laetificat\AdminBundle\Controller;
 
 use Laetificat\CommonBundle\Entity\Menu;
+use Laetificat\AdminBundle\Editor\Menu as MenuEditor;
 use Laetificat\CommonBundle\Entity\MenuItem;
 use Laetificat\CommonBundle\Entity\Project;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -11,9 +12,25 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManager;
+use Laetificat\AdminBundle\Editor;
+use Laetificat\CommonBundle\Entity\MenuRepository;
 
+/**
+ * Class DefaultController
+ * @package Laetificat\AdminBundle\Controller
+ *
+ * @Route(service="laetificat.admin.controllers.default")
+ */
 class DefaultController extends Controller
 {
+
+    private $menuEditor;
+
+    public function __construct(MenuEditor $menuEditor)
+    {
+        $this->menuEditor = $menuEditor;
+    }
+
     /**
      * @Route("/admin")
      */
@@ -23,14 +40,36 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/admin/menus/edit")
+     * @Route("/admin/menus")
+     * @Template("LaetificatAdminBundle:Backend:index.html.twig")
      */
-    public function editMenuAction()
+    public function listMenuAction()
     {
-        $menu = new Menu();
-        $menuItem = new MenuItem();
-        $menuItem->setName("Home");
-        $menuItem->setUrl("/");
+        $menus = $this->menuEditor->getMenus();
+
+        $content = [];
+
+        foreach ($menus as $menu) {
+            $content["menusArray"][] = array (
+                "id" => $menu->getId(),
+                "name" => $menu->getName(),
+                "items" => $menu->getMenuItems()
+            );
+            $items = $menu->getMenuItems();
+        }
+
+        return $content;
+    }
+
+    /**
+     * @Route("/admin/menus/edit/{menuId}", requirements={"menuId"})
+     */
+    public function editMenuAction($menuId)
+    {
+        $menu =$this->menuEditor->getMenu($menuId);
+
+        var_dump($menu->getName());
+        var_dump($menu->getMenuItems()->toArray());
 
         $form = $this->createFormBuilder($menu)
             ->add("name", "text")

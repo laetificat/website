@@ -30,9 +30,20 @@ class Menu
      */
     private $menuItems;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Laetificat\CommonBundle\Entity\Page", inversedBy="menus")
+     */
+    private $pages;
+
     public function __construct()
     {
         $this->menuItems = new ArrayCollection();
+        $this->pages = new ArrayCollection();
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getName()
@@ -58,6 +69,29 @@ class Menu
     {
         if ($this->menuItems->contains($menuItem)) {
             $this->menuItems->remove($menuItem);
+        }
+
+        return $this;
+    }
+
+    public function getPages()
+    {
+        return $this->pages;
+    }
+
+    public function addPage(Page $page)
+    {
+        if (!$this->pages->contains($page)) {
+            $this->pages->add($page);
+        }
+
+        return $this;
+    }
+
+    public function removePage(Page $page)
+    {
+        if ($this->pages->contains($page)) {
+            $this->pages->remove($page);
         }
 
         return $this;

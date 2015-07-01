@@ -10,13 +10,14 @@ use Symfony\Component\HttpFoundation\Response;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", defaults={"page" = "/"})
      * @Template("LaetificatFrontendBundle:Frontend:index.html.twig")
      */
-    public function indexAction()
+    public function indexAction($page)
     {
+        var_dump($page);
+
         return array(
-            "name" => "bla",
             "menu" => array(
                 "Home" => "/",
                 "Projects" => "/projects",

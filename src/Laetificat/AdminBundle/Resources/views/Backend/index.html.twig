@@ -1,0 +1,16 @@
+{% block menu %}
+<ul>
+    {% for menu in menusArray %}
+        <li>
+            <a href="{{app.request.uri}}/edit/{{ menu.id }}">{{ menu.name }}</a>
+            {% if menu.items is defined %}
+                <ul>
+                    {% for item in menu.items %}
+                        <li>{{ item.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
