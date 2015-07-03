@@ -1,0 +1,27 @@
+{% include 'LaetificatAdminBundle:Backend:index.html.twig' %}
+{% block itemList %}
+<ul>
+    {% for page in pagesArray %}
+        <li>
+            <a href="{{app.request.uri}}/edit/{{ page.id }}">{{ page.name }}</a>
+            {% if page.slug is defined %}
+                <ul>
+                    <li>Slug: {{ page.slug }}</li>
+                </ul>
+            {% endif %}
+            {% if page.menus is defined %}
+                <ul>
+                    <li>
+                        Menus included to:
+                        <ul>
+                            {% for menu in page.menus %}
+                                <li>{{ menu.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

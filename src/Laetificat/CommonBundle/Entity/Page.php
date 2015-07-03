@@ -35,6 +35,11 @@ class Page
      */
     private $menus;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $content;
+
     public function __construct()
     {
         $this->menus = new ArrayCollection();
@@ -88,6 +93,18 @@ class Page
         if ($this->menus->contains($menu)) {
             $this->menus->remove($menu);
         }
+
+        return $this;
+    }
+
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    public function setContent($content)
+    {
+        $this->content = $content;
 
         return $this;
     }

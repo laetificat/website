@@ -1,16 +1,11 @@
 {% block menu %}
     <ul>
-        {% for menu in menusArray %}
-            <li>
-                <a href="{{app.request.uri}}/edit/{{ menu.id }}">{{ menu.name }}</a>
-                {% if menu.items is defined %}
-                    <ul>
-                        {% for item in menu.items %}
-                            <li>{{ item.name }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </li>
+        {% for menu in menus %}
+            {% for item in menu.menuItems %}
+                <li {% if app.request.pathinfo == item.url %}class="current"{% endif %}>
+                    <a href="{{ app.request.getBaseURL() }}{{ item.url }}">{{ item.name }}</a>
+                </li>
+            {% endfor %}
         {% endfor %}
     </ul>
 {% endblock %}

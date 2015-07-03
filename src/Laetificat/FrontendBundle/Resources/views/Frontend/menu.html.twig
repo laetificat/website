@@ -1,7 +1,11 @@
 {% block menu %}
 <ul>
-    {% for item, url in menu %}
-        <li><a href="{{ url }}">{{ item }}</a></li>
+    {% for menu in menus %}
+        {% for item in menu.menuItems %}
+        <li {% if app.request.pathinfo == item.url %}class="current"{% endif %}>
+            <a href="{{ app.request.getBaseURL() }}{{ item.url }}">{{ item.name }}</a>
+        </li>
+        {% endfor %}
     {% endfor %}
 </ul>
 {% endblock %}

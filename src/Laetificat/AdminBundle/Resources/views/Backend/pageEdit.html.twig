@@ -1,0 +1,11 @@
+{% block editItem %}
+    <h3>Editing page {{ pageContent["name"] }}</h3>
+    Page name: <input type="text" value="{{ pageContent["name"] }}"/><br>
+    Page url: <input type="text" value="{{ pageContent["slug"] }}"/><br>
+    Currently added to menu(s):<br>
+    {% for menu in pageContent["menus"] %}
+        {{ menu.name }}
+    {% endfor %}
+    <br>
+    <button>Save page</button>
+{% endblock %}

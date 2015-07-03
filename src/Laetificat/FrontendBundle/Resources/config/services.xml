@@ -4,13 +4,32 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
+    <parameters>
+        <parameter key="laetificat.frontend.controllers.default.class">Laetificat\FrontendBundle\Controller\DefaultController</parameter>
+        <parameter key="laetificat.common.repositories.menu.class">Laetificat\CommonBundle\Entity\MenuRepository</parameter>
+        <parameter key="laetificat.common.repositories.page.class">Laetificat\CommonBundle\Entity\PageRepository</parameter>
+    </parameters>
+
     <services>
-        <service id="laetificat_frontend.example" class="Laetificat\FrontendBundle\Example">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="laetificat.common.repositories.menu"
+                 class="%laetificat.admin.repositories.menu.class%"
+                 factory-service="doctrine.orm.default_entity_manager"
+                 factory-method="getRepository">
+            <argument>Laetificat\CommonBundle\Entity\Menu</argument>
+        </service>
+
+        <service id="laetificat.common.repositories.page"
+                 class="%laetificat.admin.repositories.page.class%"
+                 factory-service="doctrine.orm.default_entity_manager"
+                 factory-method="getRepository">
+            <argument>Laetificat\CommonBundle\Entity\Page</argument>
+        </service>
+
+        <service id="laetificat.frontend.controllers.default" class="%laetificat.frontend.controllers.default.class%">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
+            <argument type="service" id="laetificat.common.repositories.page" />
+            <argument type="service" id="laetificat.common.repositories.menu" />
         </service>
     </services>
-    -->
+
 </container>
