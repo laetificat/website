@@ -37,6 +37,10 @@ class DefaultController extends Controller
     {
         $page = $this->pageRepository->findOneBy(array("slug" => $page));
 
+        if ($page == null) {
+            return new Response("This page could not be found", 404);
+        }
+
         $content = [];
 
         $content["content"] = $page->getContent();

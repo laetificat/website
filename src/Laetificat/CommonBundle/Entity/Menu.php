@@ -31,7 +31,7 @@ class Menu
     private $menuItems;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Laetificat\CommonBundle\Entity\Page", inversedBy="menus")
+     * @ORM\ManyToMany(targetEntity="Laetificat\CommonBundle\Entity\Page", mappedBy="menus")
      */
     private $pages;
 

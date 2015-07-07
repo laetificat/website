@@ -7,10 +7,12 @@ use Laetificat\AdminBundle\Editor\Menu as MenuEditor;
 use Laetificat\CommonBundle\Entity\MenuItem;
 use Laetificat\CommonBundle\Entity\PageRepository;
 use Laetificat\CommonBundle\Entity\Project;
+use MyProject\Proxies\__CG__\stdClass;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManager;
 use Laetificat\AdminBundle\Editor;
@@ -46,10 +48,11 @@ class DefaultController extends Controller
 
     /**
      * @Route("/admin")
+     * @Template("LaetificatAdminBundle:Backend:index.html.twig")
      */
     public function indexAction()
     {
-        return new Response("The admin page");
+        return new Response("Dashboard");
     }
 
     /**
@@ -75,22 +78,23 @@ class DefaultController extends Controller
 
     /**
      * @Route("/admin/menus/edit/{menuId}", requirements={"menuId"})
+     * @Template("LaetificatAdminBundle:Default:menu_edit.html.twig")
      */
     public function editMenuAction($menuId)
     {
-        $menu =$this->menuEditor->getMenu($menuId);
+        $menu =$this->menuRepository->findOneBy(array("id" => $menuId));
 
-        var_dump($menu->getName());
-        var_dump($menu->getMenuItems()->toArray());
+        $content = [];
 
         $form = $this->createFormBuilder($menu)
             ->add("name", "text")
             ->add("save", "submit", array("label" => "Save menu"))
             ->getForm();
 
-        return $this->render("LaetificatAdminBundle:Default:menu_edit.html.twig", array(
-            "form" => $form->createView()
-        ));
+        $content["form"] = $form->createView();
+
+        return $content;
+
     }
 
     /**
@@ -152,7 +156,7 @@ class DefaultController extends Controller
      * @Route("/admin/pages/edit/{pageId}", requirements={"pageId"})
      * @Template("LaetificatAdminBundle:Backend:pageEdit.html.twig")
      */
-    public function editPageAction($pageId)
+    public function editPageAction(Request $request, $pageId)
     {
         $page = $this->pageRepository->find($pageId);
 
@@ -160,8 +164,14 @@ class DefaultController extends Controller
             "id" => $page->getId(),
             "name" => $page->getName(),
             "slug" => $page->getSlug(),
-            "menus" => $page->getMenus()
+            "menus" => $page->getMenus(),
+            "content" => $page->getContent()
         );
+
+        if ($request->isMethod('POST')) {
+            $content = $request->getContent();
+            var_dump($content);
+        }
 
         return $content;
     }

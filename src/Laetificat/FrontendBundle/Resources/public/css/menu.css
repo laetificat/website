@@ -1,10 +1,13 @@
 ul {
     margin: 0;
     padding: 0;
-}
-
-ul li {
+    width: 100%;
     float: left;
     list-style-type: none;
+    background-color: #ffba37;
+}
+
+li {
+    display: inline;
     padding: 15px 30px 15px 30px;
 }
