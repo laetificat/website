@@ -52,7 +52,19 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return new Response("Dashboard");
+        $content = [];
+
+        $content["content"] = "Dashboard";
+
+        $page = $this->pageRepository->findOneBy(array("slug" => "/admin"));
+
+        if ($page == null) {
+            return new Response("Page not found.", Response::HTTP_NOT_FOUND);
+        }
+
+        $content["menus"] = $page->getMenus()->toArray();
+
+        return $content;
     }
 
     /**
@@ -64,6 +76,14 @@ class DefaultController extends Controller
         $menus = $this->menuEditor->getMenus();
 
         $content = [];
+
+        $page = $this->pageRepository->findOneBy(array("slug" => "/admin"));
+
+        if ($page == null) {
+            return new Response("Page not found.", Response::HTTP_NOT_FOUND);
+        }
+
+        $content["menus"] = $page->getMenus()->toArray();
 
         foreach ($menus as $menu) {
             $content["menusArray"][] = array (
@@ -78,7 +98,7 @@ class DefaultController extends Controller
 
     /**
      * @Route("/admin/menus/edit/{menuId}", requirements={"menuId"})
-     * @Template("LaetificatAdminBundle:Default:menu_edit.html.twig")
+     * @Template("LaetificatAdminBundle:Backend:menuEdit.html.twig")
      */
     public function editMenuAction($menuId)
     {
@@ -86,12 +106,19 @@ class DefaultController extends Controller
 
         $content = [];
 
-        $form = $this->createFormBuilder($menu)
-            ->add("name", "text")
-            ->add("save", "submit", array("label" => "Save menu"))
-            ->getForm();
+        $page = $this->pageRepository->findOneBy(array("slug" => "/admin"));
 
-        $content["form"] = $form->createView();
+        if ($page == null) {
+            return new Response("Page not found.", Response::HTTP_NOT_FOUND);
+        }
+
+        $content["menus"] = $page->getMenus()->toArray();
+
+        $content["menuContent"] = array (
+            "id" => $menu->getId(),
+            "name" => $menu->getName(),
+            "menuItems" => $menu->getMenuItems()
+        );
 
         return $content;
 
@@ -133,6 +160,14 @@ class DefaultController extends Controller
 
         $content = [];
 
+        $page = $this->pageRepository->findOneBy(array("slug" => "/admin"));
+
+        if ($page == null) {
+            return new Response("Page not found.", Response::HTTP_NOT_FOUND);
+        }
+
+        $content["menus"] = $page->getMenus()->toArray();
+
         $content["menusArray"][] = array (
             "id" => 1,
             "name" => "pages",
@@ -158,14 +193,22 @@ class DefaultController extends Controller
      */
     public function editPageAction(Request $request, $pageId)
     {
-        $page = $this->pageRepository->find($pageId);
+        $editPage = $this->pageRepository->find($pageId);
+
+        $page = $this->pageRepository->findOneBy(array("slug" => "/admin"));
+
+        if ($page == null) {
+            return new Response("Page not found.", Response::HTTP_NOT_FOUND);
+        }
+
+        $content["menus"] = $page->getMenus()->toArray();
 
         $content["pageContent"] = array (
-            "id" => $page->getId(),
-            "name" => $page->getName(),
-            "slug" => $page->getSlug(),
-            "menus" => $page->getMenus(),
-            "content" => $page->getContent()
+            "id" => $editPage->getId(),
+            "name" => $editPage->getName(),
+            "slug" => $editPage->getSlug(),
+            "menus" => $editPage->getMenus(),
+            "content" => $editPage->getContent()
         );
 
         if ($request->isMethod('POST')) {
