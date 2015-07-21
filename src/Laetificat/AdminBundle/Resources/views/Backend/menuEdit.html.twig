@@ -1,0 +1,10 @@
+{{ include('LaetificatAdminBundle:Element:menu.html.twig') }}
+{% block editItem %}
+    <h3>Editing menu {{ menuContent["name"] }}</h3>
+    Menu name: <input type="text" value="{{ menuContent["name"] }}"/><br>
+    Items currently in menu:<br>
+    {% for item in menuContent["menuItems"] %}
+        <a href="#">{{item.name}}</a><br>
+    {% endfor %}
+    <button>Save menu</button>
+{% endblock %}
