@@ -1,0 +1,10 @@
+{{ include('LaetificatAdminBundle:Element:menu.html.twig') }}
+{% block editItem %}
+    <h3>Create a new page</h3>
+    <form method="post">
+        Page name: <input name="page_name" type="text" value=""/><br>
+        Page url: <input name="page_url" type="text" value=""/><br>
+        Page content: <textarea name="page_content"></textarea><br>
+        <input type="submit" value="Create page">
+    </form>
+{% endblock %}

@@ -5,6 +5,7 @@ namespace Laetificat\AdminBundle\Controller;
 use Laetificat\CommonBundle\Entity\Menu;
 use Laetificat\AdminBundle\Editor\Menu as MenuEditor;
 use Laetificat\CommonBundle\Entity\MenuItem;
+use Laetificat\CommonBundle\Entity\Page;
 use Laetificat\CommonBundle\Entity\PageRepository;
 use Laetificat\CommonBundle\Entity\Project;
 use MyProject\Proxies\__CG__\stdClass;
@@ -214,6 +215,48 @@ class DefaultController extends Controller
         if ($request->isMethod('POST')) {
             $content = $request->getContent();
             var_dump($content);
+        }
+
+        return $content;
+    }
+
+
+    /**
+     * @Route("/admin/pages/create", methods={"GET", "POST"})
+     * @Template("LaetificatAdminBundle:Backend:pageCreate.html.twig")
+     */
+    public function createPageAction(Request $request)
+    {
+        $page = $this->pageRepository->findOneBy(array("slug" => "/admin"));
+
+        if ($page == null) {
+            return new Response("Page not found.", Response::HTTP_NOT_FOUND);
+        }
+
+        $content["menus"] = $page->getMenus()->toArray();
+
+        if ($request->isMethod('POST')) {
+            $new_page = array(
+                'name' => $request->request->get('page_name'),
+                'url' => $request->request->get('page_url'),
+                'content' => $request->request->get('page_content')
+            );
+
+            foreach ($new_page as $item) {
+                if (!$item || $item == "") {
+                    return new Response("Please fill in all fields");
+                }
+            }
+
+            $newPageEntity = new Page();
+            $newPageEntity->setName($new_page["name"]);
+            $newPageEntity->setSlug($new_page["url"]);
+            $newPageEntity->setContent($new_page["content"]);
+
+            $this->objectManager->persist($newPageEntity);
+            $this->objectManager->flush();
+
+            return new Response("Page " . $new_page["name"] . " successfully created.");
         }
 
         return $content;

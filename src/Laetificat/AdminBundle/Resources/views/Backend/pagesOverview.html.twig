@@ -1,5 +1,6 @@
 {{ include('LaetificatAdminBundle:Element:menu.html.twig') }}
 {% block itemList %}
+<p><a href="{{app.request.uri}}/create">Create a new page</a></p>
 <ul>
     {% for page in pagesArray %}
         <li>
