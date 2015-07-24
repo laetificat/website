@@ -36,7 +36,7 @@ class Page
     private $menus;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="text")
      */
     private $content;
 

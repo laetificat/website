@@ -1,5 +1,5 @@
 {% block menu %}
-<ul>
+<ul class="menu">
     {% for menu in menus %}
         {% for item in menu.menuItems %}
         <li {% if app.request.pathinfo == item.url %}class="current"{% endif %}>

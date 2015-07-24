@@ -213,8 +213,26 @@ class DefaultController extends Controller
         );
 
         if ($request->isMethod('POST')) {
-            $content = $request->getContent();
-            var_dump($content);
+            $new_page = array(
+                'name' => $request->request->get('page_name'),
+                'url' => $request->request->get('page_url'),
+                'content' => $request->request->get('page_content')
+            );
+
+            foreach ($new_page as $item) {
+                if (!$item || $item == "") {
+                    return new Response("Please fill in all fields");
+                }
+            }
+
+            $editPage->setName($new_page["name"]);
+            $editPage->setSlug($new_page["url"]);
+            $editPage->setContent($new_page["content"]);
+
+            $this->objectManager->persist($editPage);
+            $this->objectManager->flush();
+
+            return new Response("Page " . $new_page["name"] . " successfully saved.");
         }
 
         return $content;
